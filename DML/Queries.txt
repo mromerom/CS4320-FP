@@ -1,0 +1,83 @@
+Upload data file and Generate Manifest:
+	Insert Query:
+		Insert many for Manifest and data sets
+		Already Completed
+
+Download Data Files:
+	Should not need any queries.  Assuming files are stored on server we should
+	be able to provide an html link in order to download.
+
+Browse Data:
+	Find Query:
+		Various queries to sort data sets by different variables i.e. 
+		time, name, size, etc.
+		db.Log.find( 
+			{
+				$or; [ {Log_ID: "1"}, {Description; "Added new info to manifest 12345" },
+					{Time: "2016-11-11T14:02:10:567"} ]
+			}
+		)
+Save Data:
+	Update Query:
+		User uploads an edited version of the data set to replace the 
+		current one
+		Already Completed
+
+Search for Manifest:
+	Find Queries:
+		Same as Browse Data but for manifests.
+		db.Manifest.find( { Manifest_ID: "12345" } )
+		db.Manifest.find( { title: "Facebook Usage In Young Adults" } )
+		db.Manifest.find( 
+			{ 
+				$or: [ { keywords: "Twitter" }, { keywords: "Election" }]
+			}
+		)
+		db.Manifest.find( { author: "Erika Jorgensen } )
+		db.Manifest.find( { description : "Facebook usage in young adults" } )
+
+Search on Manifest:
+	Find Queries:
+		Search data set related to manifest by keyword.
+		db.Manifest.find( 
+			{
+				$and: [ {Manifest_ID: "12345" }, {keyword: "Twitter" } ]
+			}
+		)
+
+Contribute to Dataset:
+	Find Query:
+		Finds particular data set to contribute to, needs specific information 
+		on data set i.e. manifest id to which data set is linked.
+		db.Manifest.find( { Manifest_ID : "12345"} )
+	Insert Query:
+		Already Completed
+	Update Log:
+		db.Log.updateOne(
+			{ Manifest_ID: "12345" },
+			{
+				$set: { Time: current_date_time, Description : "Added new info to manifest 12345" } 
+			}
+		)
+				
+
+Login:
+	Insert Query:
+		Create new users
+		Already Completed
+	Find Query:
+		Verify that user and password are valid
+		db.User.find( { User_ID : "62122" } )
+		db.Password.find( { Hashed_Password : "7bhyq28t" } )
+		//in practice mock data in parentheses will be replaced by form data
+		//from website
+
+Ban IP:
+	Find Query:
+		Find user based on username
+		db.User.find( { User_ID : "62122" } )
+	Remove Query:
+		Remove user from user table and password from password table.
+		db.users.remove( { User_ID : "62122" } )
+		db.Password.remove( {User_ID : "62122"} )
+		
