@@ -19,8 +19,6 @@
         <?php
         include_once("navbar.php");
         ?>
-        <div>
-            <p>The home page. Will list manifests the user is connected to<p>
-        </div>
+        <p>Only accessable to Data Scientists. Page will allow users to create and upload a manifest to the database.</p>
     </body>
 </html>
