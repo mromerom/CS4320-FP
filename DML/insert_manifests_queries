@@ -1,0 +1,31 @@
+db.manifests.insertOne({
+  title: "Insert Manifest Test",
+  keywords: ["insert", "test", "example"],
+  description: "This is an example of an insert query",
+  author: "Matthew Romero Moore",
+  _id: ObjectId("58253960fc13ae31b000577b")
+})
+
+db.manifests.insertOne({
+  title: "Facebook Usage In Young Adults",
+  keywords: ["Facebook", "usage", "adults", "young adults"],
+  description: "Facebook usage in young adults",
+  author: "Andrew B. Rogers",
+  _id: ObjectId("58253960fc13ae31b000577f")
+})
+
+db.manifests.insertOne({
+  title: "Twitter Election 2016 Usage",
+  keywords: ["Twitter", "Election", "2016", "Election 2016", "usage"],
+  description: "Observations of the usage of Twitter during the 2016 election season.",
+  author: "Rodney B. Jacobson",
+  _id: ObjectId("58253960fc13ae31b0005782")
+})
+
+db.manifests.insertOne({
+  title: "Decline in Facebook Usage",
+  keywords: ["Facebook", "decline", "usage"],
+  description: "Data showing the decline in Facebook usage over the years.",
+  author: "Erika Jorgensen",
+  _id: ObjectId("58253ec6fc13ae31b00057e5")
+})

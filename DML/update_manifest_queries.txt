@@ -1,0 +1,38 @@
+db.manifests.update(
+  {_id: "5825299efc13ae31b00056b1"},
+  {
+    $set: {
+      title: "Test update query",
+      keywords: ["test", "query", "update"],
+      description: "This is a test update query."
+    }
+  }
+)
+
+db.manifests.update(
+  {_id: "5825352bfc13ae31b0005718"},
+  {
+    $set: {
+      title: "Proper Manifest Creation Procedures",
+      keywords: ["tutorial", "manifest", "creation", "steps", "procedure"]
+    }
+  }
+)
+
+db.manifests.udpate(
+  {_id: "58253960fc13ae31b000577f"},
+  {
+    $set: {
+      description: "This is a manifest for the study of Facebook usage among people aged 18-25."
+    }
+  }
+)
+
+db.manifests.updateMany(
+  {author: "Rodney B. Jacobson"},
+  {
+    $set: {
+      author: "Rodney B. Jacobson & Mark E. Mark"
+    }
+  }
+)

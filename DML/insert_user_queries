@@ -1,0 +1,27 @@
+db.users.insertOne({
+  user_id: "rrichardson0",
+  user_type: "administrator",
+  fname: "Raymond",
+  lname: "Richardson"
+})
+
+db.users.insertOne({
+  user_id: "ecollins0",
+  user_type: "researcher",
+  fname: "Emily",
+  lname: "Collins"
+})
+
+db.users.insertOne({
+  user_id: "aramos3",
+  user_type: "administrator",
+  fname: "Amy",
+  lname: "Ramos"
+})
+
+db.users.insertOne({
+user_id: "smoreno2",
+user_type: "researcher",
+fname: "Steve",
+lname: "Moreno"
+})
