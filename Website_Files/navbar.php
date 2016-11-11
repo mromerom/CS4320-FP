@@ -12,7 +12,7 @@
                 <li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
             </ul>
             <ul class="nav navbar-nav">
-                <li><a href="home.php">Home</a></li>
+                <li><a href="index.php">Home</a></li>
                 <li><a href="search.php">Search Manifests</a></li>
                 <?php
                   if ($_SESSION["permission_id"] == 'scientist') //Only display this menu option if a data scientist

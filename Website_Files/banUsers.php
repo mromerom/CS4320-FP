@@ -3,7 +3,7 @@
 /*
     if(!isset($SESSION['username'])){
         header("Location: login.php");
-    }
+        }
 */
 ?>
 <html>
@@ -19,8 +19,6 @@
         <?php
         include_once("navbar.php");
         ?>
-        <div>
-            <p>The home page. Will list manifests the user is connected to<p>
-        </div>
+        <p>Accessable only to admins, allows banning of users.</p>
     </body>
-</html>
+</html> 

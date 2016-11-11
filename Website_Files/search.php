@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <?php
     session_start();
 /*
@@ -19,8 +20,20 @@
         <?php
         include_once("navbar.php");
         ?>
-        <div>
-            <p>The home page. Will list manifests the user is connected to<p>
+        <div class="container">
+            <br>
+            <div class="row align-center">
+                <h1>Search Manifests</h1>
+                <form action='search.php' method='POST'>
+                    <input type="test" name="search">
+                    <input class="btn btn-info" type="submit" name="submit" value="Search">
+                </form>
+                <?php
+                if (isset($_POST["submit"])){
+                    
+                }
+                ?>
+            </div>
         </div>
     </body>
 </html>
