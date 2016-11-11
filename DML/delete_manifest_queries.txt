@@ -1,0 +1,5 @@
+db.manifests.remove( { _id : "5825299efc13ae31b00056b1" } )
+
+db.manifests.remove( { title : "Superbowl Twitter Activity" }, 1 )
+
+db.manifests.remove( { author : "Walter White" } )
