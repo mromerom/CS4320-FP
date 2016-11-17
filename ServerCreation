@@ -1,0 +1,18 @@
+Step by step-Server Creation
+
+1.  Get an AWS account
+2.  Sign into AWS account
+3.  Go to the EC2 tab
+4.  Launch an instance
+5.  Select an Ubuntu Server 16.04 LTS 
+6.  Select the free tier eliglble option
+7.  Launch the instance
+8.  Configure Security Rules for instance
+      a. Allow HTTP, HTTPS and SSH inbound
+      b. Allow all traffic out
+9.   SSH into the server using the .pem file required by Amazon
+10.  Install Apache2  (sudo apt-get install apache2)
+      a. Start service if it's not already started (sudo service apache2 start)
+11.  Install MongoDB
+      a. 
+      
