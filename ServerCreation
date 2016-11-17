@@ -14,5 +14,29 @@ Step by step-Server Creation
 10.  Install Apache2  (sudo apt-get install apache2)
       a. Start service if it's not already started (sudo service apache2 start)
 11.  Install MongoDB
-      a. 
+      a. sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
+      b. echo "deb http://repo.mongodb.org/apt/ubuntu "$(lsb_release -sc)"/mongodb-org/3.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list
+      c. sudo apt-get update
+      d. sudo apt-get install -y mongodb-org
+      e. cd /lib/systemd/system/
+      f. vim mongod.service
+            i. Paste the following into file: 
+            [Unit]
+            Description=High-performance, schema-free document-oriented database
+            After=network.target
+            Documentation=https://docs.mongodb.org/manual
+
+            [Service]
+            User=mongodb
+            Group=mongodb
+            ExecStart=/usr/bin/mongod --quiet --config /etc/mongod.conf
+
+            [Install]
+            WantedBy=multi-user.target
+      g. systemctl daemon-reload
+      h. systemctl start mongod
+      i. systemctl enable mongod
+12. Start a Mongo session
+      a. Simply type mongo into the console
+
       
