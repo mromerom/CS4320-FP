@@ -36,7 +36,11 @@ Step by step-Server Creation
       g. systemctl daemon-reload
       h. systemctl start mongod
       i. systemctl enable mongod
-12. Start a Mongo session
+12. Start a Mongo session (test if working)
       a. Simply type mongo into the console
+      b. To exit simply type exit
+13. Install Mongo-PHP driver 
+      a. sudo apt-get install php-mongodb
+      
 
       
