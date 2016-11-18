@@ -20,7 +20,27 @@
         include_once("navbar.php");
         ?>
         <div>
-            <p>The home page. Will list manifests the user is connected to<p>
+            <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Manifest</th>
+                            <th>Last Edited</th>
+                        </tr>
+                    </thead>
+                    <br>
+                    <tbody>
+                        <form action='viewManifest.php' method='post'>
+                            <tr>
+                                <td>
+                                    <input class="btn btn-info" type="submit" name="view" value="View">
+                                </td>
+                                <td><input type="hidden" name="Manifest" value="Blackboard">Blackboard</td>
+                                <td>11/12/2016</td>
+                            </tr>
+                        </form>
+                    </tbody>
+                </table>
         </div>
     </body>
 </html>
