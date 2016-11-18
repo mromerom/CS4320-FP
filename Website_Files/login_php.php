@@ -27,7 +27,7 @@
 					
 					<script type="text/javascript">
 					<!--
-					window.location = "main.php"
+					window.location = "index.php"
 					//-->
 					</script> <?php
 					
@@ -40,7 +40,7 @@
 ?>
 
 <div class='login'>
-            <form action='login.php' method='post'>
+            <form action='login_php.php' method='post'>
                <br/> You're not logged in as an admin, please do so. <br/><br/>
                 <?php if($wrongflag == 1){ echo "<font size='2px' color='red' face='Arial'> Wrong Username/Password </font><br/>";} ?>
                 <input class='login-text' type='text' name='username' value='Username' onFocus="if(this.value == 'Username') {this.value = '';}" onBlur="if (this.value == '') {this.value = 'Username';}">
