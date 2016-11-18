@@ -30,7 +30,32 @@
                 </form>
                 <?php
                 if (isset($_POST["submit"])){
-                    
+                    ?>
+                    <h4>Total Number of Results: 1</h4>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Manifests</th>
+                            <th>Creator</th>
+                            <th>Last Edited</th>
+                        </tr>
+                    </thead>
+                    <br>
+                    <tbody>
+                        <form action='viewManifest.php' method='post'>
+                            <tr>
+                                <td>
+                                    <input class="btn btn-info" type="submit" name="view" value="View">
+                                </td>
+                                <td><input type="hidden" name="Manifest" value="Amazon Analysis">Amazon Analysis</td>
+                                <td>Matthew Romero Moore</td>
+                                <td>11/12/2016</td>
+                            </tr>
+                        </form>
+                    </tbody>
+                </table>
+                        <?php
                 }
                 ?>
             </div>
