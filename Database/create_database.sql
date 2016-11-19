@@ -12,7 +12,7 @@ create table `user` (
 
 DROP TABLE IF EXISTS `manifest`;
 create table `manifest` (
-    `title` VARCHAR NOT NULL,
+    `title` VARCHAR(20) NOT NULL,
     `manifest_id` INTEGER NOT NULL,
     `user_id` INTEGER NOT NULL,
     FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`) ON DELETE CASCADE,
@@ -33,7 +33,7 @@ DROP TABLE IF EXISTS `log`;
 create table `log` (
     `log_id` INTEGER NOT NULL,
     `time` DATETIME NOT NULL,
-    `description` VARCHAR NOT NULL,
+    `description` VARCHAR(20) NOT NULL,
     `user_id` INTEGER NOT NULL,
     `manifest_id` INTEGER NOT NULL,
     FOREIGN KEY (`manifest_id`) REFERENCES `manifest`(`manifest_id`) ON DELETE CASCADE,
@@ -42,8 +42,8 @@ create table `log` (
 
 DROP TABLE IF EXISTS `password`;
 create table `password` (
-    `salt` VARCHAR NOT NULL,
-    `hashed_password` VARCHAR NOT NULL,
+    `salt` VARCHAR(20) NOT NULL,
+    `hashed_password` VARCHAR(20) NOT NULL,
     `user_id` INTEGER NOT NULL,
     FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`) ON DELETE CASCADE,
     PRIMARY KEY(`user_id`)
