@@ -15,7 +15,7 @@ create table `manifest` (
     `title` VARCHAR(20) NOT NULL,
     `manifest_id` INTEGER NOT NULL,
     `user_id` INTEGER NOT NULL,
-    FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`) ON DELETE CASCADE,
+    FOREIGN KEY (`user_id`) REFERENCES `USER`(`user_id`) ON DELETE CASCADE,
     PRIMARY KEY(`manifest_id`)
 ) ENGINE = INNODB;
 
@@ -25,7 +25,7 @@ create table `uploads` (
     `manifest_id` INTEGER NOT NULL,
     `user_id` INTEGER NOT NULL,
     FOREIGN KEY (`manifest_id`) REFERENCES `manifest`(`manifest_id`) ON DELETE CASCADE,
-    FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`) ON DELETE CASCADE,
+    FOREIGN KEY (`user_id`) REFERENCES `USER`(`user_id`) ON DELETE CASCADE,
     PRIMARY KEY(`manifest_id`, `user_id`)
 ) ENGINE = INNODB;
 
@@ -45,6 +45,6 @@ create table `password` (
     `salt` VARCHAR(20) NOT NULL,
     `hashed_password` VARCHAR(20) NOT NULL,
     `user_id` INTEGER NOT NULL,
-    FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`) ON DELETE CASCADE,
+    FOREIGN KEY (`user_id`) REFERENCES `USER`(`user_id`) ON DELETE CASCADE,
     PRIMARY KEY(`user_id`)
 ) ENGINE = INNODB;
