@@ -1,12 +1,12 @@
 --Created 10/27/2016 by Kevin Free
 
 DROP TABLE IF EXISTS `user`;
-create table `user` (
+create table `USER` (
     `user_id` INTEGER NOT NULL,
     `user_type` BOOLEAN, -- 0==researcher, 1==admin
-    `username` VARCHAR NOT NULL,
-    `f_name` VARCHAR DEFAULT NULL,
-    `l_name` VARCHAR NOT NULL,
+    `username` VARCHAR(20) NOT NULL,
+    `f_name` VARCHAR(20) DEFAULT NULL,
+    `l_name` VARCHAR(20) NOT NULL,
     PRIMARY KEY(`user_id`)
 ) ENGINE = INNODB;
 
