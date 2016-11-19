@@ -13,7 +13,7 @@
 			$postedUsername = $_POST['username']; //Gets the posted username, put's it into a variable.
 			$postedPassword = $_POST['password']; //Gets the posted password, put's it into a variable.
 			$userDatabaseSelect = $m->collections->users; //Selects the user collection
-			$userDatabaseFind = $userDatabaseSelect->find(array('username' => $postedUsername)); //Does a search for Usernames with the posted Username Variable
+			$userDatabaseFind = $userDatabaseSelect->find(array('userid' => $postedUsername)); //Does a search for Usernames with the posted Username Variable
 				
 				//Iterates through the found results
 				foreach($userDatabaseFind as $userFind) {
