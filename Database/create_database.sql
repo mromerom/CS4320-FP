@@ -21,9 +21,9 @@ create table `manifest` (
 
 DROP TABLE IF EXISTS `uploads`;
 create table `uploads` (
-    `upload_time` DATETIME NOT NULL;
-    `manifest_id` INTEGER NOT NULL;
-    `user_id` INTEGER NOT NULL;
+    `upload_time` DATETIME NOT NULL,
+    `manifest_id` INTEGER NOT NULL,
+    `user_id` INTEGER NOT NULL,
     FOREIGN KEY (`manifest_id`) REFERENCES `manifest`(`manifest_id`) ON DELETE CASCADE,
     FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`) ON DELETE CASCADE,
     PRIMARY KEY(`manifest_id`, `user_id`)
