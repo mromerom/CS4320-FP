@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <?php
     session_start();
-/*
-    if(!isset($SESSION['username'])){
+    if(!isset($_SESSION['username'])){
         header("Location: login.php");
+        exit();
     }
-*/
 ?>
 <html>
     <head>
