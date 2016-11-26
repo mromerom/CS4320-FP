@@ -1,10 +1,9 @@
 <?php
     session_start();
-/*
-    if(!isset($SESSION['username'])){
+    if(!isset($_SESSION['username'])){
         header("Location: login.php");
+        exit();
     }
-*/
 ?>
 <html>
     <head>
@@ -17,13 +16,13 @@
         <script>
             function Download(){
             }
-            
+
             function Edit(){
                 document.View.action = "editManifest.php";
                 document.View.submit();
                 return true;
             }
-            
+
             function Delete(){
                 var r = confirm("Are you sure you want to delete the manifest?");
                 if(r == true){

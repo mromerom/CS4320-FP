@@ -1,10 +1,9 @@
 <?php
     session_start();
-/*
-    if(!isset($SESSION['username'])){
+    if(!isset($_SESSION['username'])){
         header("Location: login.php");
-        }
-*/
+        exit();
+    }
 ?>
 <html>
     <head>
@@ -21,4 +20,4 @@
         ?>
         <p>Accessable only to admins, allows banning of users.</p>
     </body>
-</html> 
+</html>

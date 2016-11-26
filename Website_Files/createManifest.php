@@ -1,10 +1,9 @@
 <?php
     session_start();
-/*
-    if(!isset($SESSION['username'])){
+    if(!isset($_SESSION['username'])){
         header("Location: login.php");
+        exit();
     }
-*/
 ?>
 <html>
     <head>
@@ -29,8 +28,8 @@
                     $(addto).after(newInput);
                     $(addRemove).after(removeButton);
                     $("#file" + next).attr('data-source',$(addto).attr('data-source'));
-                    $("#count").val(next);  
-                    
+                    $("#count").val(next);
+
                     $('.remove-me').click(function(e){
                         e.preventDefault();
                         var fieldNum = this.id.charAt(this.id.length-1);
@@ -42,7 +41,7 @@
             });
 
         </script>
-        
+
     </head>
     <body>
         <?php
