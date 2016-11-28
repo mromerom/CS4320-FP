@@ -90,6 +90,7 @@
                     //Verify that the typed password matches the entry
                     if(password_verify($salt.$_POST['password'], $hpass)){
                         $_SESSION['username'] = $_POST['username'];
+                        $_SESSION['usertype'] = $foundUser['usertype'];
                         header("Location: index.php");
                         exit();
                     } else {
