@@ -6,7 +6,7 @@ Check out [our wiki](https://github.com/mromerom/CS4320-FP/wiki) for more inform
 ### Server
 The easiest way to deploy our software is through AWS.  
 From https://aws.amazon.com/ create an EC2 instance running Ubuntu 16.04.  
-Once you create your instance, the site instructions for connecting via command line.
+Once you create your instance, the site provides instructions for connecting via command line.
 
 ### Server configuration
 Our project runs using MongoDB Enterprise 3.2.11, so follow [this guide](https://docs.mongodb.com/manual/tutorial/install-mongodb-enterprise-on-ubuntu/) to install it on your server.  
@@ -30,7 +30,7 @@ Remove the "index.html" file located in the `/var/www/html` directory on your in
 Move all the files from the `Website_Files` directory of the repository into the `/var/www/html` directory.  
 Access your instance via a web browser and you should be good to go!
 
-##### Note:  
+## Admin User  
 To create an admin user for the site, you must edit the "createUser.php" file in `Website_Files`.  
 1. On line 70, uncomment the switch option for an admin user.  
 2. Using FileZilla, upload the edited "createUser.php" to the site (in `/var/www/html`).  
