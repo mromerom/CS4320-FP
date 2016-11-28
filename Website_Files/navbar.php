@@ -15,13 +15,13 @@
                 <li><a href="index.php">Home</a></li>
                 <li><a href="search.php">Search Manifests</a></li>
                 <?php
-                  //if ($_SESSION["permission_id"] == 'scientist') //Only display this menu option if a data scientist
+                  if ($_SESSION['usertype'] == 'scientist' || $_SESSION['usertype'] == 'admin') //Only display this menu option if a data scientist
                   {
                     ?>
                     <li><a href="createManifest.php">Create New Manifest</a></li>
                 <?php
                   }
-                  //if ($_SESSION["permission_id"] == 'admin') //Only display this menu option if an admin
+                  if ($_SESSION['usertype'] == 'admin') //Only display this menu option if an admin
                     {
                  ?>
                 <li><a href="banUsers.php">Ban Users</a></li>

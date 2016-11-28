@@ -63,6 +63,17 @@
                             <input class="form-control" type="text" name="username" placeholder="Username" required>
                         </div>
                         <div class="form-group">
+                            <label class="inputdefault">User Type</label>
+                            <select class="form-control" name="usertype">
+	                               <option value="student">Student</option>
+	                               <option value="scientist">Data Scientist</option>
+                                 <!--
+                                    To create an admin user, uncomment the following line:
+                                    <option value="admin">Admin</option>
+                                 -->
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label class="inputdefault">Password</label>
                             <input class="form-control" type="password" name="password" placeholder="Password" required>
                         </div>
@@ -110,6 +121,7 @@
                         "fname" => $_POST['fname'],
                         "lname" => $_POST['lname'],
                         "username" => $_POST['username'],
+                        "usertype" => $_POST['usertype'],
                         "salt" => $salt,
                         "hpass" => $hpass
                     );
@@ -117,6 +129,7 @@
                     //Insert the entry into the users collection and login if successful
                     if($collection->insert($entry)){
                         $_SESSION['username'] = $_POST['username'];
+                        $_SESSION['usertype'] = $_POST['usertype'];
                         header("Location: index.php");
                         exit();
                     } else {
