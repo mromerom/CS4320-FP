@@ -83,7 +83,7 @@
                         </div>
                         <div class="form-group">
                             <input class="btn btn-info" type="submit" name="submit" value="Create">
-                            <a class="btn btn-info" href="createUser.php">Back to Login</a>
+                            <a class="btn btn-info" href="login.php">Back to Login</a>
                         </div>
                     </div>
                 </div>
