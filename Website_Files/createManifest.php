@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+
 <?php
     session_start();
     if(!isset($_SESSION['username'])){
@@ -29,7 +31,6 @@
                     $(addRemove).after(removeButton);
                     $("#file" + next).attr('data-source',$(addto).attr('data-source'));
                     $("#count").val(next);
-
                     $('.remove-me').click(function(e){
                         e.preventDefault();
                         var fieldNum = this.id.charAt(this.id.length-1);
@@ -39,13 +40,36 @@
                     });
                 });
             });
-
         </script>
 
     </head>
     <body>
         <?php
         include_once("navbar.php");
+        ?>
+
+        <?php
+              switch ($_SESSION["fail"])//Checks for fail flags
+              {
+                case '-1'://All Database errors
+                  ?>
+                  <div class="alert alert-danger">Could not create manifest.</div>
+                  <?php
+                break;
+                case 'invalidtitle':
+                  ?>
+                  <div class="alert alert-warning">Title is already taken.</div>
+                  <?php
+                break;
+                case 'invalidabstract':
+                  ?>
+                  <div class="alert alert-warning">Abstract matches previously created manifest</div>
+                  <?php
+                break;
+                default:
+                  break;
+              }
+              unset($_SESSION["fail"]);
         ?>
         <h1>Create New Manifest</h1>
         <form action="createManifest.php" method="POST">
@@ -59,8 +83,8 @@
                     <input class="form-control" type="url" name="id" required>
                 </div>
                 <div class="form-group">
-                    <label class="inputdefault">Creator</label>
-                    <input class="form-control" type="text" name="creator" required>
+                    <label class="inputdefault">Author</label>
+                    <input class="form-control" type="text" name="author" required>
                 </div>
                 <div class="form-group">
                     <label class="inputdefault">Abstract</label>
@@ -86,5 +110,40 @@
             </div>
             <input class="btn btn-info" type="submit" name="submit" value="Submit">
         </form>
+
+        <?php
+            if(isset($_POST['submit'])) {
+              //Connect to database and select manifests collection
+              $m = new MongoClient();
+              $db = $m->collections;
+              $collection = $db->manifests;
+
+              //Check if there is an entry in the collection with the same title or abstract
+              if($collection->findOne(array("title" => $_POST['title'])) != NULL) {
+                  $_SESSION['fail'] = 'invalidtitle';
+                  header("Location: createManifest.php");
+                  exit();
+              }
+
+              if ($collection->findOne(array("abstract" => $_POST['abstract'])) != NULL) {
+                  $_SESSION['fail'] = 'invalidabstract';
+                  header("Location: createManifest.php");
+                  exit();
+              }
+
+              //Create the entry for the database
+              $entry = array(
+                  "title" => $_POST['title'],
+                  "id" => $_POST['datasetURL'],
+                  "author" => $_POST['author'],
+                  "abstract" => $_POST['abstract'],
+                  "oversight" => $_POST['oversight'],
+                  "file1" => $_POST['uploadedFile']
+              );
+
+              //Insert entry into the users collection
+              $collection->insert($entry);
+            }
+        ?>
     </body>
 </html>
