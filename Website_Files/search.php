@@ -23,40 +23,62 @@
             <br>
             <div class="row align-center">
                 <h1>Search Manifests</h1>
-                <form action='search.php' method='POST'>
-                    <input type="test" name="search">
+                <form action='search2.php' method='POST'>
+                    <label class="radio-inline">
+                        <input type="radio" name="radios" value="title" checked>Title
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="radios" value="author">Author
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="radios" value="id">Dataset URL
+                    </label>
+                    <input type="text" name="search">
                     <input class="btn btn-info" type="submit" name="submit" value="Search">
                 </form>
                 <?php
                 if (isset($_POST["submit"])){
-                    ?>
-                    <h4>Total Number of Results: 1</h4>
+                    $connection = new MongoClient();
+                    $db = $connection->collections;
+                    $collection = $db->manifests;
+                    $radio = $_POST["radios"];
+                    $search = $_POST["search"];
+                    $query = array($radio => $search);
+                    $cursor = $collection->find($query);
+                    echo '<h4>Total Number of Results: '.$cursor->count().'</h4>';
+                ?>
                 <table class="table table-hover">
                     <thead>
                         <tr>
                             <th></th>
-                            <th>Manifests</th>
-                            <th>Creator</th>
-                            <th>Last Edited</th>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Dataset URL</th>
                         </tr>
                     </thead>
                     <br>
                     <tbody>
+                        <?php
+                        foreach ($cursor as $manifest){
+                        ?>
                         <form action='viewManifest.php' method='post'>
                             <tr>
                                 <td>
                                     <input class="btn btn-info" type="submit" name="view" value="View">
                                 </td>
-                                <td><input type="hidden" name="Manifest" value="Amazon Analysis">Amazon Analysis</td>
-                                <td>Matthew Romero Moore</td>
-                                <td>11/12/2016</td>
+                                <?php
+                                echo '<td><input type="hidden" name="title" value="'.$manifest["title"].'">'.$manifest["title"].'</td>';
+                                echo '<td><input type="hidden" name="author" value="'.$manifest["author"].'">'.$manifest["author"].'</td>';
+                                echo '<td><input type="hidden" name="id" value="'.$manifest["id"].'">'.$manifest["id"].'</td>';
+                                ?>
                             </tr>
                         </form>
+                        <?php
+                        }
+                    }
+                    ?>
                     </tbody>
                 </table>
-                        <?php
-                }
-                ?>
             </div>
         </div>
     </body>
