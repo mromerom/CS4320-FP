@@ -32,7 +32,7 @@ Access your instance via a web browser and you should be good to go!
 
 ## Admin User  
 To create an admin user for the site, you must edit the "createUser.php" file in `Website_Files`.  
-1. On line 70, uncomment the switch option for an admin user.  
+1. On line 72, uncomment the switch option for an admin user. The file has an instruction comment for it too.  
 2. Using FileZilla, upload the edited "createUser.php" to the site (in `/var/www/html`).  
 3. Access the createUser page of the site and create your admin user.  
 4. Comment back out what you uncommented in step 1.  
