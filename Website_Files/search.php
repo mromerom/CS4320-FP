@@ -23,7 +23,7 @@
             <br>
             <div class="row align-center">
                 <h1>Search Manifests</h1>
-                <form action='search2.php' method='POST'>
+                <form action='search.php' method='POST'>
                     <label class="radio-inline">
                         <input type="radio" name="radios" value="title" checked>Title
                     </label>
