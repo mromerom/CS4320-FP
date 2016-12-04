@@ -18,6 +18,25 @@
         <?php
         include_once("navbar.php");
         ?>
+
+        <?php
+              switch ($_SESSION["message"])//Checks for flags
+              {
+                case 'created':
+                  ?>
+                  <div class="alert alert-success">Successfully created user!</div>
+                  <?php
+                break;
+                case 'loggedin':
+                  ?>
+                  <div class="alert alert-success">Successfully logged in!</div>
+                  <?php
+                break;
+                default:
+                  break;
+              }
+              unset($_SESSION["message"]);
+        ?>
         <div>
             <table class="table table-hover">
                     <thead>

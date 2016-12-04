@@ -19,6 +19,25 @@
         <?php
         include_once("navbar.php");
         ?>
+
+        <?php
+              switch ($_SESSION["message"])//Checks for flags
+              {
+                case 'deleted':
+                  ?>
+                  <div class="alert alert-success">Successfully deleted manifest.</div>
+                  <?php
+                break;
+                case 'deletefailed':
+                  ?>
+                  <div class="alert alert-warning">Could not delete manifest.</div>
+                  <?php
+                break;
+                default:
+                  break;
+              }
+              unset($_SESSION["message"]);
+        ?>
         <div class="container">
             <br>
             <div class="row align-center">
@@ -61,7 +80,7 @@
                         <?php
                         foreach ($cursor as $manifest){
                         ?>
-                        <form action='viewManifest.php' method='post'>
+                        <form action="viewManifest.php" method="POST">
                             <tr>
                                 <td>
                                     <input class="btn btn-info" type="submit" name="view" value="View">

@@ -22,7 +22,7 @@
             <br>
             <div class="row text-center">
                 <?php
-              switch ($_SESSION["fail"])//Checks for fail flags
+              switch ($_SESSION["message"])//Checks for fail flags
               {
                 case '-1'://All Database errors
                   ?>
@@ -42,7 +42,7 @@
                 default:
                   break;
               }
-              unset($_SESSION["fail"]);
+              unset($_SESSION["message"]);
                ?>
             </div>
             <h1>Login</h1>
@@ -78,7 +78,7 @@
 
                     //If there is no entry with the typed username
                     if($foundUser == NULL) {
-                        $_SESSION['fail'] = 'invalidusername';
+                        $_SESSION['message'] = 'invalidusername';
                         header("Location: login.php");
                         exit();
                     }
@@ -91,10 +91,13 @@
                     if(password_verify($salt.$_POST['password'], $hpass)){
                         $_SESSION['username'] = $_POST['username'];
                         $_SESSION['usertype'] = $foundUser['usertype'];
+                        $_SESSION['fname'] = $foundUser['fname'];
+                        $_SESSION['lname'] = $foundUser['lname'];
+                        $_SESSION['message'] = "loggedin";
                         header("Location: index.php");
                         exit();
                     } else {
-                        $_SESSION['fail'] = 'invalidpassword';
+                        $_SESSION['message'] = 'invalidpassword';
                         header("Location: login.php");
                         exit();
                     }
