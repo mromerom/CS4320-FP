@@ -130,7 +130,7 @@
                   exit();
               }
 
-              $today = date("m/d/y \a\t h:i:s");
+              $today = date("M d y \at h:i:s");
 
               //Create the entry for the database
               $entry = array(
