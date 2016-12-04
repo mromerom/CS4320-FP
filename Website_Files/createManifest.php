@@ -41,7 +41,6 @@
                 });
             });
         </script>
-
     </head>
     <body>
         <?php
@@ -49,7 +48,7 @@
         ?>
 
         <?php
-              switch ($_SESSION["message"])//Checks for fail flags
+              switch ($_SESSION["fail"])//Checks for fail flags
               {
                 case '-1'://All Database errors
                   ?>
@@ -80,7 +79,7 @@
                 </div>
                 <div class="form-group">
                     <label class="inputdefault">Dataset URL</label>
-                    <input class="form-control" type="url" name="id" required>
+                    <input class="form-control" type="url" name="datasetURL" required>
                 </div>
                 <div class="form-group">
                     <label class="inputdefault">Author</label>
@@ -112,38 +111,45 @@
         </form>
 
         <?php
-          if(isset($_POST['submit'])) {
-            //Connect to database and select manifests collection
-            $m = new MongoClient();
-            $db = $m->collections;
-            $collection = $db->manifests;
+            if(isset($_POST['submit'])) {
+              //Connect to database and select manifests collection
+              $m = new MongoClient();
+              $db = $m->collections;
+              $collection = $db->manifests;
 
-            //Check if there is an entry in the collection with the same title or abstract
-            if($collection->findOne(array("title" => $_POST['title'])) != NULL) {
-                $_SESSION['message'] = 'invalidtitle';
-                header("Location: createManifest.php");
-                exit();
+              //Check if there is an entry in the collection with the same title or abstract
+              if($collection->findOne(array("title" => $_POST['title'])) != NULL) {
+                  $_SESSION['fail'] = 'invalidtitle';
+                  header("Location: createManifest.php");
+                  exit();
+              }
+
+              if ($collection->findOne(array("abstract" => $_POST['abstract'])) != NULL) {
+                  $_SESSION['fail'] = 'invalidabstract';
+                  header("Location: createManifest.php");
+                  exit();
+              }
+
+              date_default_timezone_set('America/Chicago');
+
+              $today = date("M d y \@ h:i:s");
+
+              //Create the entry for the database
+              $entry = array(
+                  "title" => $_POST['title'],
+                  "datasetURL" => $_POST['datasetURL'],
+                  "author" => $_POST['author'],
+                  "abstract" => $_POST['abstract'],
+                  "oversight" => $_POST['oversight'],
+                  "file1" => $_POST['uploadedFile'],
+                  "username" => $_SESSION['username'],
+                  "date" => $today
+              );
+
+
+              //Insert entry into the users collection
+              $collection->insert($entry);
             }
-
-            if ($collection->findOne(array("abstract" => $_POST['abstract'])) != NULL) {
-                $_SESSION['message'] = 'invalidabstract';
-                header("Location: createManifest.php");
-                exit();
-            }
-
-            //Create the entry for the database
-            $entry = array(
-                "title" => $_POST['title'],
-                "id" => $_POST['datasetURL'],
-                "author" => $_POST['author'],
-                "abstract" => $_POST['abstract'],
-                "oversight" => $_POST['oversight'],
-                "file1" => $_POST['uploadedFile']
-            );
-
-            //Insert entry into the users collection
-            $collection->insert($entry);
-          }
-          ?>
+        ?>
     </body>
 </html>
