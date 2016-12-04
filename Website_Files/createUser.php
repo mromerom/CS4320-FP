@@ -42,11 +42,10 @@
                 default:
                   break;
               }
-              unset($_SESSION["fail"]);
+              unset($_SESSION["message"]);
                ?>
             </div>
             <h1>Create User</h1>
-            <h5>~Will automatically log in upon successful user creation~</h5>
             <form action="<?=$_SERVER['PHP_SELF']?>" method="POST" class="col-md-4 col-md-offset-5">
                 <div class="row">
                     <div class="input-group">
@@ -130,6 +129,9 @@
                     if($collection->insert($entry)){
                         $_SESSION['username'] = $_POST['username'];
                         $_SESSION['usertype'] = $_POST['usertype'];
+                        $_SESSION['fname'] = $_POST['fname'];
+                        $_SESSION['lname'] = $_POST['lname'];
+                        $_SESSION['message'] = "created";
                         header("Location: index.php");
                         exit();
                     } else {

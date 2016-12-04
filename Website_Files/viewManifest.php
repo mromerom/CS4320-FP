@@ -42,6 +42,8 @@
         <h3>Will show all information about the manifest.</h3>
         <form name="View" method="POST">
             <div class="form-group">
+                <input type="hidden" name="title" value="<?=$_POST['title']?>" />
+                <input type="hidden" name="delete" value="Delete" />
                 <button class="btn btn-info" type="button" name="download" onclick="Download">Download</button>
                 <button class="btn btn-info" type="button" name="edit" onclick="Edit()">Edit</button>
                 <button class="btn btn-warning" type="button" name="delete" onclick="Delete()">Delete</button>
