@@ -43,15 +43,6 @@
             <div class="row align-center">
                 <h1>Search Manifests</h1>
                 <form action='search.php' method='POST'>
-                    <label class="radio-inline">
-                        <input type="radio" name="radios" value="title" checked>Title
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" name="radios" value="author">Author
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" name="radios" value="id">Dataset URL
-                    </label>
                     <input type="text" name="search">
                     <input class="btn btn-info" type="submit" name="submit" value="Search">
                 </form>
@@ -61,9 +52,15 @@
                     $db = $connection->collections;
                     $collection = $db->manifests;
                     $radio = $_POST["radios"];
-                    $search = $_POST["search"];
-                    $query = array($radio => $search);
-                    $cursor = $collection->find($query);
+                    $string = $_POST["search"];
+                    $cursor = $collection->find(
+                        array('$text' => array('$search' => $string)),
+                        array('score' => array('$meta' => 'textScore'))
+                    );
+
+                    $cursor = $cursor->sort(
+                        array('score' => array('$meta' => 'textScore'))
+                    );
                     echo '<h4>Total Number of Results: '.$cursor->count().'</h4>';
                 ?>
                 <table class="table table-hover">
@@ -88,7 +85,7 @@
                                 <?php
                                 echo '<td><input type="hidden" name="title" value="'.$manifest["title"].'">'.$manifest["title"].'</td>';
                                 echo '<td><input type="hidden" name="author" value="'.$manifest["author"].'">'.$manifest["author"].'</td>';
-                                echo '<td><input type="hidden" name="id" value="'.$manifest["id"].'">'.$manifest["id"].'</td>';
+                                echo '<td><input type="hidden" name="id" value="'.$manifest["id"].'">'.$manifest["datasetURL"].'</td>';
                                 ?>
                             </tr>
                         </form>
