@@ -79,7 +79,7 @@
                 </div>
                 <div class="form-group">
                     <label class="inputdefault">Dataset URL</label>
-                    <input class="form-control" type="url" name="id" required>
+                    <input class="form-control" type="url" name="datasetURL" required>
                 </div>
                 <div class="form-group">
                     <label class="inputdefault">Author</label>
@@ -130,12 +130,14 @@
                   exit();
               }
 
-              $today = date("M d y \at h:i:s");
+              date_default_timezone_set('America/Chicago');
+
+              $today = date("M d y \@ h:i:s");
 
               //Create the entry for the database
               $entry = array(
                   "title" => $_POST['title'],
-                  "id" => $_POST['datasetURL'],
+                  "datasetURL" => $_POST['datasetURL'],
                   "author" => $_POST['author'],
                   "abstract" => $_POST['abstract'],
                   "oversight" => $_POST['oversight'],
