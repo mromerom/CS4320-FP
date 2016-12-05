@@ -6,7 +6,7 @@
         header("Location: login.php");
         exit();
     }
-    if(!isset($_POST['title'])) {
+    if(!isset($_POST['datasetURL'])) {
       $_SESSION["message"] = '-1';
     } else {
       //Connect to database and select manifests collection
@@ -14,7 +14,7 @@
       $db = $m->collections;
       $collection = $db->manifests;
 
-      $foundManifest = $collection->findOne(array("title" => $_POST['title']));
+      $foundManifest = $collection->findOne(array("datasetURL" => $_POST['datasetURL']));
       $manifestString = json_encode($foundManifest, JSON_PRETTY_PRINT);
     }
 ?>
@@ -57,7 +57,10 @@
 
         <?php
           if(isset($_POST['submit'])) {
-            $_POST["textarea"]
+            //Connect to database and select manifests collection
+            $m = new MongoClient();
+            $db = $m->collections;
+            $collection = $db->manifests;
 
           }
           ?>

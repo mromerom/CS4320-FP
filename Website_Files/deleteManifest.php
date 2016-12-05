@@ -10,8 +10,8 @@
         exit();
     }
 
-    if(!isset($_POST['title'])){
-      header("Location: ".$_SERVER['HTTP_REFERER']);
+    if(!isset($_POST['datasetURL'])){
+      header('Location: '.$_SERVER['HTTP_REFERER']);
       exit();
     }
 
@@ -19,13 +19,13 @@
     $db = $m->collections;
     $collection = $db->manifests;
 
-    if($collection->remove(array("title" => $_POST['title'])) == TRUE) {
+    if($collection->remove(array("datasetURL" => $_POST['datasetURL'])) == TRUE) {
         $_SESSION['message'] = "deleted";
-        header("Location: search.php");
+        header("Location: index.php");
         exit();
     } else {
         $_SESSION['message'] = "deletefailed";
-        header("Location: search.php");
+        header("Location: index.php");
         exit();
     }
 ?>
