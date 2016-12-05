@@ -57,7 +57,10 @@
 
         <?php
           if(isset($_POST['submit'])) {
-            $_POST["textarea"]
+            //Connect to database and select manifests collection
+            $m = new MongoClient();
+            $db = $m->collections;
+            $collection = $db->manifests;
 
           }
           ?>
