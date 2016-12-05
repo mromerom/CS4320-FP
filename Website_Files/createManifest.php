@@ -6,6 +6,11 @@
         header("Location: login.php");
         exit();
     }
+
+    if($_SESSION['usertype'] != 'scientist' && $_SESSION['usertype'] != 'admin') {
+        header("Location: index.php");
+        exit();
+    }
 ?>
 <html>
     <head>
@@ -15,141 +20,202 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-        <script>
-            $(document).ready(function(){
-                var next = 1;
-                $(".add-more").click(function(e){
-                    e.preventDefault();
-                    var addto = "#file" + next;
-                    var addRemove = "#file" + (next);
-                    next = next + 1;
-                    var newIn = '<input  class="input form-control" id="file' + next + '" type="file" name="file' + next + '">';
-                    var newInput = $(newIn);
-                    var removeBtn = '<button id="remove' + (next - 1) + '" class="btn btn-danger remove-me" >-</button></div><div id="files">';
-                    var removeButton = $(removeBtn);
-                    $(addto).after(newInput);
-                    $(addRemove).after(removeButton);
-                    $("#file" + next).attr('data-source',$(addto).attr('data-source'));
-                    $("#count").val(next);
-                    $('.remove-me').click(function(e){
-                        e.preventDefault();
-                        var fieldNum = this.id.charAt(this.id.length-1);
-                        var fieldID = "#file" + fieldNum;
-                        $(this).remove();
-                        $(fieldID).remove();
-                    });
-                });
-            });
-        </script>
+        <style>
+            fieldset {
+                border: 1px solid;
+                margin: 0 2px;
+                padding: .35em .625em .75em;
+            }
+        </style>
     </head>
     <body>
         <?php
-        include_once("navbar.php");
-        ?>
+            if(isset($_POST['submit'])) {
 
-        <?php
-              switch ($_SESSION["fail"])//Checks for fail flags
-              {
+                function test_input($data){
+                    $data = trim($data);
+                   $data = stripslashes($data);
+                    $data = htmlspecialchars($data);
+                    return $data;
+                }
+              
+                $datasetURL = test_input($_POST['datasetURL']);
+                $creatorComment = test_input($_POST['creatorComment']);
+                $title = test_input($_POST['title']);
+                $abstract = test_input($_POST['abstract']);
+                $publication = test_input($_POST['publication']);
+
+                $i = 1;
+                $anonymizedData = array();
+                $anonymizedDataCnt = 0;
+                while($i <= 11){
+                    if(isset($_POST['data'.$i])){
+                        $anonymizedDataCnt = $anonymizedDataCnt + 1;
+                        $anonymizedData["label".$anonymizedDataCnt] = $_POST['data'.$i];
+                    }
+                    $i++;
+                }
+                if($anonymizedDataCnt == 0){
+                    $_SESSION['message'] = 'invalidanonymized';
+                    header("Location: createManifest.php");
+                    exit();
+                }else{
+                    $anonymizedData["numberData"] = $anonymizedDataCnt;
+                }
+                
+                $privacyConsiderations = test_input($_POST['privacyConsiderations']);
+                $provenance = test_input($_POST['narrative']);
+                $name = test_input($_POST['name']);
+                $email = test_input($_POST['email']);
+                
+                //Connect to database and select manifests collection
+                $m = new MongoClient();
+                $db = $m->collections;
+                $collection = $db->manifests;
+
+                //Check if there is an entry in the collection with the same dataset URL
+                if($collection->findOne(array("id" => $datasetURL)) != NULL) {
+                    $_SESSION['message'] = 'invaliddatasetURL';
+                    header("Location: createManifest.php");
+                    exit();
+                }
+                
+                $today = date("M d y");
+
+                //Create the entry for the database
+                $entry = array(
+                    "id" => $datasetURL,
+                    "creator" => $_SESSION['fname']." ".$_SESSION['lname'],
+                    "dateCreated" => $today,
+                    "comment" => $creatorComment,
+                    "researchObject" => array(
+                        "title" => $title,
+                        "abstract" => $abstract,
+                        "privacyEthics" => array(
+                            "oversight" => $_POST['oversight'],
+                            "informedConsent" => $_POST['informedConsent'],
+                            "anonymizedData" => $anonymizedData,
+                            "privacyConsiderations" => $privacyConsiderations,
+                            )
+                        ),
+                    "provenance" => $provenance,
+                    "publications" => array(
+                        "publication" => $publication
+                        ),
+                    "creators" => array(
+                        "creator" => array(
+                            "name" => name,
+                            "role" => $_POST['role'],
+                            "type" => $_POST['type'],
+                            "contact" => $email
+                            )
+                        )
+                    );
+                                
+                //Insert entry into the users collection
+                $collection->insert($entry);
+                $_SESSION['message'] = 'success';
+            }
+            include_once("navbar.php");
+            switch ($_SESSION["message"])//Checks for message flags
+            {
                 case '-1'://All Database errors
-                  ?>
-                  <div class="alert alert-danger">Could not create manifest.</div>
-                  <?php
-                break;
-                case 'invalidtitle':
-                  ?>
-                  <div class="alert alert-warning">Title is already taken.</div>
-                  <?php
-                break;
-                case 'invalidabstract':
-                  ?>
-                  <div class="alert alert-warning">Abstract matches previously created manifest</div>
-                  <?php
-                break;
+                    ?>
+                    <div class="alert alert-danger">Could not create manifest.</div>
+                    <?php
+                    break;
+                case 'invaliddatasetURL':
+                    ?>
+                    <div class="alert alert-warning">Dataset URL is already taken.</div>
+                    <?php
+                    break;
+                case 'invalidanonymized':
+                    ?>
+                    <div class="alert alert-warning">Input for Anonymized Date is required.</div>
+                    <?php
+                    break;
+                case 'success':
+                    ?>
+                    <div class="alert alert-success">Manifest successfully created.</div>
+                    <?php
+                    break;
                 default:
-                  break;
-              }
-              unset($_SESSION["fail"]);
+                    break;
+            }
+            unset($_SESSION["message"]);
         ?>
         <h1>Create New Manifest</h1>
+        <h5>Items marked with an * are required.</h5>
         <form action="createManifest.php" method="POST">
-            <div class="input-group">
-                <div class="form-group">
-                    <label class="inputdefault">Title</label>
-                    <input class="form-control" type="text" name="title" required>
-                </div>
-                <div class="form-group">
-                    <label class="inputdefault">Dataset URL</label>
-                    <input class="form-control" type="url" name="datasetURL" required>
-                </div>
-                <div class="form-group">
-                    <label class="inputdefault">Author</label>
-                    <input class="form-control" type="text" name="author" required>
-                </div>
-                <div class="form-group">
-                    <label class="inputdefault">Abstract</label>
-                    <textarea class="form-control" name="abstract" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label class="inputdefault">Oversight</label>
-                    <select class="form-control" name="oversight" required>
+            <fieldset>
+                <legend>Manifest Information</legend>
+                    * URL of Dataset<br>
+                    <input type="url" name="datasetURL" required><br>
+                    Comments about the manifest or the creator of the manifest.<br>
+                    <input type="text" name="creatorComment"><br>
+            </fieldset>
+            <fieldset>
+                <legend>Dataset Information</legend>
+                * Title of dataset or one sentence that describes the contents of the dataset.<br>
+                <input type="text" name="title" required><br>
+                * Abstract<br>
+                <textarea name="abstract" required></textarea><br>
+                Publications (cite with APA format)<br>
+                <input type="text" name="publication"><br>
+                Provence (Input free text or URL to the location of the provence. Type No Assertion if not applicable)<br>
+                <textarea name="narrative"></textarea><br>
+                <fieldset>
+                    <legend>Privacy and Ethics</legend>
+                    Institutional Oversight<br>
+                    <select name="oversight" >
+                        <option value="No Assertion">No Assertion</option>
                         <option value="IRB">IRB</option>
                         <option value="REB">REB</option>
                         <option value="REC">REC</option>
                         <option value="Not required">Not required</option>
                         <option value="Other">Other</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="inputdefault">File</label>
-                    <div id="files">
-                        <input class="form-control" id="file1" type="file" name="file1">
-                        <button id="b1" class="btn add-more" type="button">+</button>
-                    </div>
-                </div>
-            </div>
+                    </select><br><br>
+                    Informed Consent<br>
+                    <input type="radio" name="informedConsent" value="Informed Consent Obtained">Informed Consent Obtained<br>
+                    <input type="radio" name="informedConsent" value="Participants Notified">Participants Notified<br>
+                    <input type="radio" name="informedConsent" value="No Assertion" checked>No Assertion<br><br>
+                    * Anonymized Data (Select all that apply. If none apply, select no assertion.)<br>
+                    <input type="checkbox" name="data1" value="names anonymized">Names Anonymized
+                    <input type="checkbox" name="data2" value="names excluded">Names Excluded
+                    <input type="checkbox" name="data3" value="DoB anonymized">Date of Birth Anonymized
+                    <input type="checkbox" name="data4" value="date of death anonymized">Date of Death Anonymized
+                    <input type="checkbox" name="data5" value="identifying numbers anonymized">Indentifying Numbers Anonymized<br>
+                    <input type="checkbox" name="data6" value="race and ethnicity categories anonymized">Race and Ethnicity Categories Anonymized
+                    <input type="checkbox" name="data7" value="religious affiliation anonymized">Religious Affiliation Anonymized
+                    <input type="checkbox" name="data8" value="health and wellness data anonymized">Health and Wellness Data Anonymized
+                    <input type="checkbox" name="data9" value="location and GPS coordinates anonymized">Location and GPS Coordinated Anonymized<br>
+                    <input type="checkbox" name="data10" value="Other">Other
+                    <input type="checkbox" name="data11" value="No Assertion">No Assertion<br><br>
+                    * Any special considerations needed to be taken to maintain the rights and privacy of subjects when using the dataset. Type No Assertion if not applicable.<br>
+                    <textarea name="privacyConsiderations" required></textarea>
+                </fieldset>
+                <fieldset>
+                    <legend>Creators</legend>
+                    <label class="inputdefault">* Name</label><br>
+                    <input type="text" name="name" required><br>
+                    <label class="inputdefault">Role</label><br>
+                    <input type="radio" name="role" value="Corporate sponsor">Corporate Sponsor<br>
+                    <input type="radio" name="role" value="Grant funder">Grant Funder<br>
+                    <input type="radio" name="role" value="Primary investigator">Primary Investigator<br>
+                    <input type="radio" name="role" value="Other">Other<br>
+                    <input type="radio" name="role" value="No Assertion" checked>No Assertion<br><br>
+                    <label class="inputdefault">Type</label><br>
+                    <input type="radio" name="type" value="Education institutions">Educations Institutions<br>
+                    <input type="radio" name="type" value="Government">Government<br>
+                    <input type="radio" name="type" value="NGO">NGO<br>
+                    <input type="radio" name="type" value="Individual">Individual<br>
+                    <input type="radio" name="type" value="Private for profit entity">Private for Profit Entity<br>
+                    <input type="radio" name="type" value="No Assertion" checked>No Assertion<br><br>
+                    <label class="inputdefault">* Email</label>
+                    <input type="email" name="email" required>
+                </fieldset>
+            </fieldset>
             <input class="btn btn-info" type="submit" name="submit" value="Submit">
         </form>
-
-        <?php
-            if(isset($_POST['submit'])) {
-              //Connect to database and select manifests collection
-              $m = new MongoClient();
-              $db = $m->collections;
-              $collection = $db->manifests;
-
-              //Check if there is an entry in the collection with the same title or abstract
-              if($collection->findOne(array("title" => $_POST['title'])) != NULL) {
-                  $_SESSION['fail'] = 'invalidtitle';
-                  header("Location: createManifest.php");
-                  exit();
-              }
-
-              if ($collection->findOne(array("abstract" => $_POST['abstract'])) != NULL) {
-                  $_SESSION['fail'] = 'invalidabstract';
-                  header("Location: createManifest.php");
-                  exit();
-              }
-
-              date_default_timezone_set('America/Chicago');
-
-              $today = date("M d y \@ h:i:s");
-
-              //Create the entry for the database
-              $entry = array(
-                  "title" => $_POST['title'],
-                  "datasetURL" => $_POST['datasetURL'],
-                  "author" => $_POST['author'],
-                  "abstract" => $_POST['abstract'],
-                  "oversight" => $_POST['oversight'],
-                  "file1" => $_POST['uploadedFile'],
-                  "username" => $_SESSION['username'],
-                  "date" => $today
-              );
-
-
-              //Insert entry into the users collection
-              $collection->insert($entry);
-            }
-        ?>
     </body>
 </html>
