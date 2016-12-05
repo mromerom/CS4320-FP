@@ -74,7 +74,7 @@
                 $collection = $db->manifests;
 
                 //Check if there is an entry in the collection with the same dataset URL
-                if($collection->findOne(array("datasetURL" => $datasetURL)) != NULL) {
+                if($collection->findOne(array("id" => $datasetURL)) != NULL) {
                     $_SESSION['message'] = 'invaliddatasetURL';
                     header("Location: createManifest.php");
                     exit();
@@ -84,11 +84,10 @@
 
                 //Create the entry for the database
                 $entry = array(
-                    "datasetURL" => $datasetURL,
-                    "author" => $_SESSION['fname']." ".$_SESSION['lname'],
+                    "id" => $datasetURL,
+                    "creator" => $_SESSION['fname']." ".$_SESSION['lname'],
                     "dateCreated" => $today,
                     "comment" => $creatorComment,
-                    "title" => $title,
                     "researchObject" => array(
                         "title" => $title,
                         "abstract" => $abstract,
@@ -163,8 +162,8 @@
                 <textarea name="abstract" required></textarea><br>
                 Publications (cite with APA format)<br>
                 <input type="text" name="publication"><br>
-                * Provence (Input free text or URL to the location of the provence. Type No Assertion if not applicable)<br>
-                <textarea name="narrative" required></textarea><br>
+                Provence (Input free text or URL to the location of the provence. Type No Assertion if not applicable)<br>
+                <textarea name="narrative"></textarea><br>
                 <fieldset>
                     <legend>Privacy and Ethics</legend>
                     Institutional Oversight<br>

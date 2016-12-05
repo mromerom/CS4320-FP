@@ -4,11 +4,6 @@
         header("Location: login.php");
         exit();
     }
-    if(!isset($_POST['title'])) {
-      $_SESSION["message"] = '-1';
-      header("Location: search.php");
-      exit();
-    }
 ?>
 <html>
     <head>
@@ -44,19 +39,10 @@
         <?php
         include_once("navbar.php");
         ?>
-
-        <?php
-        $m = new MongoClient();
-        $db = $m->collections;
-        $collection = $db->manifests;
-
-        $foundManifest = $collection->findOne(array("datasetURL" => $_POST['datasetURL']));
-        $manifestString = json_encode($foundManifest, JSON_PRETTY_PRINT);
-        echo '<pre>'.$manifestString.'</pre>';
-        ?>
+        <h3>Will show all information about the manifest.</h3>
         <form name="View" method="POST">
             <div class="form-group">
-                <input type="hidden" name="datasetURL" value="<?=$_POST['datasetURL']?>" />
+                <input type="hidden" name="title" value="<?=$_POST['title']?>" />
                 <input type="hidden" name="delete" value="Delete" />
                 <button class="btn btn-info" type="button" name="download" onclick="Download">Download</button>
                 <button class="btn btn-info" type="button" name="edit" onclick="Edit()">Edit</button>

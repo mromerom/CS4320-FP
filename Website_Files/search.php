@@ -23,11 +23,6 @@
         <?php
               switch ($_SESSION["message"])//Checks for flags
               {
-                case '-1':
-                  ?>
-                  <div class="alert alert-danger">Error</div>
-                  <?php
-                break;
                 case 'deleted':
                   ?>
                   <div class="alert alert-success">Successfully deleted manifest.</div>
@@ -90,7 +85,7 @@
                                 <?php
                                 echo '<td><input type="hidden" name="title" value="'.$manifest["title"].'">'.$manifest["title"].'</td>';
                                 echo '<td><input type="hidden" name="author" value="'.$manifest["author"].'">'.$manifest["author"].'</td>';
-                                echo '<td><input type="hidden" name="datasetURL" value="'.$manifest["datasetURL"].'">'.$manifest["datasetURL"].'</td>';
+                                echo '<td><input type="hidden" name="id" value="'.$manifest["id"].'">'.$manifest["datasetURL"].'</td>';
                                 ?>
                             </tr>
                         </form>
