@@ -37,7 +37,15 @@
                 resize: none;
                 overflow: hidden;
                 min-height: 50px;
-                width: 330px;
+                width: 700px;
+            }
+            
+            #fbootstrap {
+                margin-left: 0%;
+            }
+            
+            #nobootstrap {
+                margin-bottom: 8px;
             }
         </style>
     </head>
@@ -60,13 +68,13 @@
               unset($_SESSION["message"]);
         ?>
         <h1>Edit Manifest</h1>
-        <form action="<?=$_SERVER['PHP_SELF']?>" method="POST" class="col-md-4 col-md-offset-5">
+        <form id="fbootstrap" action="<?=$_SERVER['PHP_SELF']?>" method="POST" class="col-md-4 col-md-offset-5">
             <div class="input-group">
                 <div class="form-group">
                     <textarea autofocus onfocus="auto_grow(this)" name="textarea"><?=$manifestString?></textarea>
                 </div>
             </div>
-            <input class="btn btn-info" type="submit" name="submit" value="Submit">
+            <input id="nobootstrap" class="btn btn-info" type="submit" name="submit" value="Submit">
         </form>
 
         <?php
@@ -76,6 +84,7 @@
             $db = $m->collections;
             $collection = $db->manifests;
 
+            
           }
           ?>
     </body>
