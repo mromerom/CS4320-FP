@@ -37,28 +37,49 @@
               }
               unset($_SESSION["message"]);
         ?>
-        <div>
-            <table class="table table-hover">
+        <div class="container">
+            <br>
+            <div class="row align-center">
+                <?php
+                    $connection = new MongoClient();
+                    $db = $connection->collections;
+                    $collection = $db->manifests;
+
+                    $cursor = $collection->find();
+                    $cursor = $cursor->sort(array("date" => -1));
+                ?>
+                <table class="table table-hover">
                     <thead>
                         <tr>
                             <th></th>
-                            <th>Manifest</th>
-                            <th>Last Edited</th>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Dataset URL</th>
                         </tr>
                     </thead>
                     <br>
                     <tbody>
-                        <form action='viewManifest.php' method='post'>
+                        <?php
+                        foreach ($cursor as $manifest){
+                        ?>
+                        <form action="viewManifest.php" method="POST">
                             <tr>
                                 <td>
                                     <input class="btn btn-info" type="submit" name="view" value="View">
                                 </td>
-                                <td><input type="hidden" name="Manifest" value="Blackboard">Blackboard</td>
-                                <td>11/12/2016</td>
+                                <?php
+                                echo '<td><input type="hidden" name="title" value="'.$manifest["title"].'">'.$manifest["title"].'</td>';
+                                echo '<td><input type="hidden" name="author" value="'.$manifest["author"].'">'.$manifest["author"].'</td>';
+                                echo '<td><input type="hidden" name="id" value="'.$manifest["id"].'">'.$manifest["datasetURL"].'</td>';
+                                ?>
                             </tr>
                         </form>
+                        <?php
+                        }
+                    ?>
                     </tbody>
                 </table>
+            </div>
         </div>
     </body>
 </html>

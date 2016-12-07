@@ -23,6 +23,11 @@
         <?php
               switch ($_SESSION["message"])//Checks for flags
               {
+                case '-1':
+                  ?>
+                  <div class="alert alert-danger">Error</div>
+                  <?php
+                break;
                 case 'deleted':
                   ?>
                   <div class="alert alert-success">Successfully deleted manifest.</div>
