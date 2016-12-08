@@ -27,9 +27,47 @@
                 padding: .35em .625em .75em;
             }
         </style>
+        <script>
+            var uploadControlCounter=0;
+            $(document).ready(function () {
+                $("#addFileUpload").click(function (e) {
+                    e.preventDefault();
+                    createFileUpload();
+                });
+
+                $("#uploadUI").on("click", "a.removeUpload", function (e) {
+                    e.preventDefault();
+                    $(this).parent().remove();
+                });
+
+                createFileUpload();
+                document.getElementById("uploadControlCounter").value = uploadControlCounter;
+            });
+
+            function createFileUpload() {
+            $("#uploadUI")
+                .append(
+                    $("<div />")
+                        .attr("id", "fileContainer")
+                    .append(
+                        $("<input />")
+                            .attr("type", "file")
+                            .attr("name", "file[]")
+                    )
+                    .append(" ")
+                    .append(
+                        $("<a />")
+                            .attr("href", "#")
+                            .attr("class", "removeUpload")
+                            .text("Remove")
+                    )
+                );
+            }
+        </script>
     </head>
     <body>
         <?php
+
             if(isset($_POST['submit'])) {
 
                 function test_input($data){
@@ -38,9 +76,22 @@
                     $data = htmlspecialchars($data);
                     return $data;
                 }
-              
+
                 $datasetURL = test_input($_POST['datasetURL']);
+
+                                $m = new MongoClient();
+                $db = $m->collections;
+                $collection = $db->manifests;
+
+                //Check if there is an entry in the collection with the same dataset URL
+                if($collection->findOne(array("datasetURL" => $datasetURL)) != NULL) {
+                    $_SESSION['message'] = 'invaliddatasetURL';
+                    header("Location: createManifest.php");
+                    exit();
+                }
+
                 $creatorComment = test_input($_POST['creatorComment']);
+                $author = $_SESSION['fname']." ".$_SESSION['lname'];
                 $title = test_input($_POST['title']);
                 $abstract = test_input($_POST['abstract']);
                 $publication = test_input($_POST['publication']);
@@ -62,32 +113,51 @@
                 }else{
                     $anonymizedData["numberData"] = $anonymizedDataCnt;
                 }
-                
+
                 $privacyConsiderations = test_input($_POST['privacyConsiderations']);
                 $provenance = test_input($_POST['narrative']);
                 $name = test_input($_POST['name']);
                 $email = test_input($_POST['email']);
-                
-                //Connect to database and select manifests collection
-                $m = new MongoClient();
-                $db = $m->collections;
-                $collection = $db->manifests;
 
-                //Check if there is an entry in the collection with the same dataset URL
-                if($collection->findOne(array("id" => $datasetURL)) != NULL) {
-                    $_SESSION['message'] = 'invaliddatasetURL';
+                //upload files to server
+                $oldmask = umask(0);
+                if(!mkdir("ManifestFiles/".$_SESSION['username']."/".str_replace(' ', '', $title), 0777, true)){
+                    umask($oldmask);
+                    $_SESSION['directoryfail'];
                     header("Location: createManifest.php");
                     exit();
                 }
-                
-                $today = date("M d y");
+                umask($oldmask);
+                $target_dir = "ManifestFiles/".$_SESSION['username']."/".str_replace(' ', '', $title)."/";
+                $filesArray = array();
+                $fileCnt = 0;
+                foreach($_FILES['file']['name'] as $filename){
+                    $target_file = $target_dir.basename($filename);
+                    move_uploaded_file($_FILES['file']['tmp_name'][$fileCnt], $target_file);
+                    $fileType = pathinfo($target_file, PATHINFO_EXTENSION);
+                    $fileHash = md5_file($filename);
+                    $file = array();
+                    $file['name'] = $filename;
+                    $file['format'] = $fileType;
+                    $file['size'] = $_FILES['file']['size'][$fileCnt];
+                    $file['url'] = $target_file;
+                    $file['checksum'] = $fileHash;
+                    $fileCnt++;
+                    $filesArray['file'.$fileCnt] = $file;
+                }
+                $filesArray['fileCnt'] = $fileCnt;
+
+
+                $today = date("M d y \@ h:i:s");
 
                 //Create the entry for the database
                 $entry = array(
-                    "id" => $datasetURL,
-                    "creator" => $_SESSION['fname']." ".$_SESSION['lname'],
+                    "datasetURL" => $datasetURL,
+                    "author" => $author,
+                    "username" => $_SESSION['username'],
                     "dateCreated" => $today,
                     "comment" => $creatorComment,
+                    "title" => $title,
                     "researchObject" => array(
                         "title" => $title,
                         "abstract" => $abstract,
@@ -96,22 +166,23 @@
                             "informedConsent" => $_POST['informedConsent'],
                             "anonymizedData" => $anonymizedData,
                             "privacyConsiderations" => $privacyConsiderations,
-                            )
-                        ),
+                            ),
                     "provenance" => $provenance,
                     "publications" => array(
                         "publication" => $publication
                         ),
                     "creators" => array(
                         "creator" => array(
-                            "name" => name,
+                            "name" => $name,
                             "role" => $_POST['role'],
                             "type" => $_POST['type'],
                             "contact" => $email
                             )
-                        )
-                    );
-                                
+                        ),
+                    "files" => $filesArray
+                    )
+                );
+
                 //Insert entry into the users collection
                 $collection->insert($entry);
                 $_SESSION['message'] = 'success';
@@ -139,6 +210,14 @@
                     <div class="alert alert-success">Manifest successfully created.</div>
                     <?php
                     break;
+                case 'filefail':
+                    echo "<div class='alert alert-warning'>File ".$_SESSION['file']." failed to upload.</div>";
+                    break;
+                case 'directoryfail':
+                        ?>
+                        <div class="alert alert-warning">Failed to make directory</div>;
+                        <?php
+                        break;
                 default:
                     break;
             }
@@ -146,24 +225,24 @@
         ?>
         <h1>Create New Manifest</h1>
         <h5>Items marked with an * are required.</h5>
-        <form action="createManifest.php" method="POST">
+        <form action="createManifest.php" method="POST" enctype="multipart/form-data">
             <fieldset>
                 <legend>Manifest Information</legend>
                     * URL of Dataset<br>
-                    <input type="url" name="datasetURL" required><br>
+                    <input type="url" name="datasetURL" value="<?php $_POST['datasetURL']?>" required><br>
                     Comments about the manifest or the creator of the manifest.<br>
-                    <input type="text" name="creatorComment"><br>
+                    <input type="text" name="creatorComment" value="<?php $_POST['creatorComment']?>"><br>
             </fieldset>
             <fieldset>
                 <legend>Dataset Information</legend>
                 * Title of dataset or one sentence that describes the contents of the dataset.<br>
-                <input type="text" name="title" required><br>
+                <input type="text" name="title" value="<?php $_POST['title']?>" required><br>
                 * Abstract<br>
                 <textarea name="abstract" required></textarea><br>
                 Publications (cite with APA format)<br>
                 <input type="text" name="publication"><br>
-                Provence (Input free text or URL to the location of the provence. Type No Assertion if not applicable)<br>
-                <textarea name="narrative"></textarea><br>
+                * Provence (Input free text or URL to the location of the provence. Type No Assertion if not applicable)<br>
+                <textarea name="narrative" required></textarea><br>
                 <fieldset>
                     <legend>Privacy and Ethics</legend>
                     Institutional Oversight<br>
@@ -213,6 +292,12 @@
                     <input type="radio" name="type" value="No Assertion" checked>No Assertion<br><br>
                     <label class="inputdefault">* Email</label>
                     <input type="email" name="email" required>
+                </fieldset>
+                <fieldset>
+                    <legend>Files</legend>
+                    <p id="uploadUI">
+                        <a href="#" class="btn btn-info" id="addFileUpload">Upload another file...</a>
+                    </p>
                 </fieldset>
             </fieldset>
             <input class="btn btn-info" type="submit" name="submit" value="Submit">
