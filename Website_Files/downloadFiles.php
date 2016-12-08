@@ -31,25 +31,5 @@
 
     $dir = "ManifestFiles/".$_POST['manifestUsername']."/".str_replace(' ', '', $_POST['manifestTitle']);
 
-    if(!array_map('unlink', glob($dir."/*.*"))) {
-        $_SESSION["message"] = 'deletefailed';
-        header("Location: search.php");
-        exit();
-    }
-
-    if(!rmdir($dir)) {
-      $_SESSION["message"] = 'deletefailed';
-      header("Location: search.php");
-      exit();
-    }
-
-    if($collection->remove(array("datasetURL" => $_POST['datasetURL'])) == TRUE) {
-        $_SESSION['message'] = "deleted";
-        header("Location: search.php");
-        exit();
-    } else {
-        $_SESSION['message'] = "deletefailed";
-        header("Location: search.php");
-        exit();
-    }
+    header("Location: $dir");
 ?>
