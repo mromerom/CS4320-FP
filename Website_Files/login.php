@@ -33,6 +33,11 @@
               text-align: center;
           }
 
+	  .btn btn-info{
+	      background-image: -webkit-linear-gradient(0,0,0);
+	      background-image: #333;
+	  }
+
         </style>
     </head>
     <body>
