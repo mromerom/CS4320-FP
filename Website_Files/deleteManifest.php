@@ -10,7 +10,17 @@
         exit();
     }
 
-    if(!isset($_POST['title'])){
+    if(!isset($_POST['datasetURL'])){
+      header("Location: ".$_SERVER['HTTP_REFERER']);
+      exit();
+    }
+
+    if(!isset($_POST['manifestTitle'])){
+      header("Location: ".$_SERVER['HTTP_REFERER']);
+      exit();
+    }
+
+    if(!isset($_POST['manifestUsername'])){
       header("Location: ".$_SERVER['HTTP_REFERER']);
       exit();
     }
@@ -19,7 +29,21 @@
     $db = $m->collections;
     $collection = $db->manifests;
 
-    if($collection->remove(array("title" => $_POST['title'])) == TRUE) {
+    $dir = "ManifestFiles/".$_POST['manifestUsername']."/".str_replace(' ', '', $_POST['manifestTitle']);
+
+    if(!array_map('unlink', glob($dir."/*.*"))) {
+        $_SESSION["message"] = 'deletefailed';
+        header("Location: search.php");
+        exit();
+    }
+
+    if(!rmdir($dir)) {
+      $_SESSION["message"] = 'deletefailed';
+      header("Location: search.php");
+      exit();
+    }
+
+    if($collection->remove(array("datasetURL" => $_POST['datasetURL'])) == TRUE) {
         $_SESSION['message'] = "deleted";
         header("Location: search.php");
         exit();

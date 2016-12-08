@@ -20,6 +20,8 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
         <script>
             function Download(){
+                document.View.action = "downloadFiles.php";
+                document.View.submit();
             }
 
             function Edit(){
@@ -50,15 +52,18 @@
         $db = $m->collections;
         $collection = $db->manifests;
 
-        $foundManifest = $collection->findOne(array("title" => $_POST['title']));
+        $foundManifest = $collection->findOne(array("datasetURL" => $_POST['datasetURL']));
         $manifestString = json_encode($foundManifest, JSON_PRETTY_PRINT);
         echo '<pre>'.$manifestString.'</pre>';
         ?>
+
         <form name="View" method="POST">
             <div class="form-group">
-                <input type="hidden" name="title" value="<?=$_POST['title']?>" />
+                <input type="hidden" name="manifestUsername" value="<?=$foundManifest['username']?>" />
+                <input type="hidden" name="manifestTitle" value="<?=$foundManifest['title']?>" />
+                <input type="hidden" name="datasetURL" value="<?=$_POST['datasetURL']?>" />
                 <input type="hidden" name="delete" value="Delete" />
-                <button class="btn btn-info" type="button" name="download" onclick="Download">Download</button>
+                <button class="btn btn-info" type="button" name="download" onclick="Download()">Download</button>
                 <button class="btn btn-info" type="button" name="edit" onclick="Edit()">Edit</button>
                 <button class="btn btn-warning" type="button" name="delete" onclick="Delete()">Delete</button>
             </div>
