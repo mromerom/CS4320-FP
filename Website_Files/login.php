@@ -15,6 +15,30 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <link href="https://fonts.googleapis.com/css?family=Domine" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Abril+Fatface" rel="stylesheet">
+        <style>
+          body{
+              background-image: url("images/login.jpg");
+              background-size: 1920px 1080px;
+              background-repeat: no-repeat;
+          }
+
+          #paperviewHeader{
+              margin-top: 100px;
+              font-family: 'Abril Fatface', serif;
+	      /*font-family: monospace;*/
+	      letter-spacing: 5px;
+              font-size: 70pt;
+              text-align: center;
+          }
+
+	  .btn btn-info{
+	      background-image: -webkit-linear-gradient(0,0,0);
+	      background-image: #333;
+	  }
+
+        </style>
     </head>
     <body>
         <div class="container-fluid">
@@ -45,21 +69,22 @@
               unset($_SESSION["message"]);
                ?>
             </div>
-            <h1>Login</h1>
-            <form action="<?=$_SERVER['PHP_SELF']?>" method="POST" class="col-md-4 col-md-offset-5">
+            <div id="paperviewHeader">PAPERVIEW</div>
+            <h1 style="text-align: center; margin-top: 80px; font-family: monospace;">Login</h1>
+            <form action="<?=$_SERVER['PHP_SELF']?>" method="POST" class="col-md-4 col-md-offset-5" style=" display: inline-block; width: 250px; clear: left; margin-top: 50px;">
                 <div class="row">
                     <div class="input-group">
-                        <div class="form-group">
-                            <label class="inputdefault">Username</label>
-                            <input class="form-control" type="text" name="username" placeholder="Username" required>
+                        <div class="form-group" style="border-radius: 0px;">
+                            <label class="inputdefault" style="font-family: monospace;">Username</label>
+                            <input class="form-control" style="border-radius: 0px;" type="text" name="username" placeholder="Username" required>
                         </div>
-                        <div class="form-group">
-                            <label class="inputdefault">Password</label>
-                            <input class="form-control" type="password" name="password" placeholder="Password" required>
+                        <div class="form-group" style="position: absolute; top: 65px; border-radius: 0px;">
+                            <label class="inputdefault" style="font-family: monospace;">Password</label>
+                            <input class="form-control" style="border-radius: 0px;" type="password" name="password" placeholder="Password" required>
                         </div>
-                        <div class="form-group">
-                            <input class="btn btn-info" type="submit" name="submit" value="Log In">
-                            <a class="btn btn-info" href="createUser.php">Create User</a>
+                        <div class="form-group" style="position: absolute; top: 140px; border-radius: 0px;">
+                            <input class="btn btn-info" style="border-radius: 1px; background-color: #333;" type="submit" name="submit" value="Log In">
+                            <a class="btn btn-info" style="border-radius: 1px; background-color: #333;" href="createUser.php">Create User</a>
                         </div>
                     </div>
                 </div>
