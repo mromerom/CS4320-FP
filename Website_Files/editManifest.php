@@ -74,17 +74,20 @@
                     <textarea autofocus onfocus="auto_grow(this)" name="textarea"><?=$manifestString?></textarea>
                 </div>
             </div>
-            <input id="nobootstrap" class="btn btn-info" type="submit" name="submit" value="Submit">
+            <input type="hidden" name="datasetURL" value="<?=$_POST['datasetURL']?>"/>
+            <input id="nobootstrap" class="btn btn-info" type="submit" name="edit" value="Submit">
         </form>
 
         <?php
-          if(isset($_POST['submit'])) {
+          if(isset($_POST['edit'])) {
             //Connect to database and select manifests collection
             $m = new MongoClient();
             $db = $m->collections;
             $collection = $db->manifests;
 
-            
+            if($collection -> findOne(array('datasetURL' => $_POST['datasetURL'], 'username' => $_SESSION['username'])) == NULL){
+                $collection -> update(array('datasetURL' => $_POST['datasetURL']), array('$addToSet' => array("contributors" => $_SESSION['username'])));
+            }
           }
           ?>
     </body>
