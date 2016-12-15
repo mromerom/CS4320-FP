@@ -155,6 +155,7 @@
                     "datasetURL" => $datasetURL,
                     "author" => $author,
                     "username" => $_SESSION['username'],
+                    "contributors" => array(),
                     "dateCreated" => $today,
                     "comment" => $creatorComment,
                     "title" => $title,
