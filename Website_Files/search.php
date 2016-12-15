@@ -85,7 +85,7 @@
                                 <?php
                                 echo '<td><input type="hidden" name="title" value="'.$manifest["title"].'">'.$manifest["title"].'</td>';
                                 echo '<td><input type="hidden" name="author" value="'.$manifest["author"].'">'.$manifest["author"].'</td>';
-                                echo '<td><input type="hidden" name="id" value="'.$manifest["id"].'">'.$manifest["datasetURL"].'</td>';
+                                echo '<td><input type="hidden" name="datasetURL" value="'.$manifest["datasetURL"].'">'.$manifest["datasetURL"].'</td>';
                                 ?>
                             </tr>
                         </form>

@@ -4,6 +4,11 @@
         header("Location: login.php");
         exit();
     }
+    if(!isset($_POST['title'])) {
+      $_SESSION["message"] = '-1';
+      header("Location: search.php");
+      exit();
+    }
 ?>
 <html>
     <head>
@@ -13,8 +18,15 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <style>
+            pre {
+                white-space: pre-wrap;
+            }
+        </style>
         <script>
             function Download(){
+                document.View.action = "downloadFiles.php";
+                document.View.submit();
             }
 
             function Edit(){
@@ -39,12 +51,24 @@
         <?php
         include_once("navbar.php");
         ?>
-        <h3>Will show all information about the manifest.</h3>
+
+        <?php
+        $m = new MongoClient();
+        $db = $m->collections;
+        $collection = $db->manifests;
+
+        $foundManifest = $collection->findOne(array("datasetURL" => $_POST['datasetURL']));
+        $manifestString = json_encode($foundManifest, JSON_PRETTY_PRINT);
+        echo '<pre>'.$manifestString.'</pre>';
+        ?>
+
         <form name="View" method="POST">
             <div class="form-group">
-                <input type="hidden" name="title" value="<?=$_POST['title']?>" />
+                <input type="hidden" name="manifestUsername" value="<?=$foundManifest['username']?>" />
+                <input type="hidden" name="manifestTitle" value="<?=$foundManifest['title']?>" />
+                <input type="hidden" name="datasetURL" value="<?=$_POST['datasetURL']?>" />
                 <input type="hidden" name="delete" value="Delete" />
-                <button class="btn btn-info" type="button" name="download" onclick="Download">Download</button>
+                <button class="btn btn-info" type="button" name="download" onclick="Download()">Download</button>
                 <button class="btn btn-info" type="button" name="edit" onclick="Edit()">Edit</button>
                 <button class="btn btn-warning" type="button" name="delete" onclick="Delete()">Delete</button>
             </div>

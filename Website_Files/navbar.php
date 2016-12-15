@@ -24,7 +24,7 @@
                   if ($_SESSION['usertype'] == 'admin') //Only display this menu option if an admin
                     {
                  ?>
-                <li><a href="banUsers.php">Ban Users</a></li>
+                <li><a href="manageUsers.php">Manage Users</a></li>
                 <?php
                     }
                 ?>
