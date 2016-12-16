@@ -11,7 +11,8 @@ Once you create your instance, the site provides instructions for connecting via
 ### Server configuration
 Our project runs using MongoDB Enterprise 3.2.11, so follow [this guide](https://docs.mongodb.com/manual/tutorial/install-mongodb-enterprise-on-ubuntu/) to install it on your server.  
 Then follow [this guide](http://lornajane.net/posts/2016/php-7-0-and-5-6-on-ubuntu) to install and switch php from version 7.0 to 5.6 because there isn’t a php mongodb driver for php7.0.  
-Finally, run `sudo apt-get install php5.6-mongo` from the command line to install the driver
+Finally, run `sudo apt-get install php5.6-mongo` from the command line to install the driver  
+Note: This was our eventual solution to correctly configuring the server. Due to the nature of setting up a server, especially if you have not done it before, this may not work exactly right the first time. Troubleshooting may be necessary.  
 
 ### The software
 Clone the master branch of this repository.  
@@ -26,6 +27,7 @@ Using FileZilla, connect to your instance. FileZilla download can be found [here
 6. Browse for the .pem keyfile that you downloaded when you created your instance.  
 7. Hit connect.  
 
+Run `sudo chmod 777 /var/www/html` from the command line.  
 Remove the "index.html" file located in the `/var/www/html` directory on your instance.  
 Move all the files from the `Website_Files` directory of the repository into the `/var/www/html` directory.  
 Access your instance via a web browser and you should be good to go!
