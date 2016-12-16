@@ -36,6 +36,8 @@
                     $_SESSION["message"] = 'datasetURL';
                 } else if($updateManifest['title'] != $oldManifest['title']) {
                     $_SESSION["message"] = 'title';
+                } else if($updateManifest['dateCreated'] != $oldManifest['dateCreated']) {
+                    $_SESSION["message"] = 'dateCreated';
                 } else if($updateManifest['username'] != $oldManifest['username']) {
                     $_SESSION["message"] = 'username';
                 } else {
@@ -123,6 +125,11 @@
                 case 'title':
                   ?>
                   <div class="alert alert-danger">You can't change the title.</div>
+                  <?php
+                break;
+                case 'dateCreated':
+                  ?>
+                  <div class="alert alert-danger">You can't change the creation date.</div>
                   <?php
                 break;
                 case 'username':
